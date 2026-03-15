@@ -4,6 +4,10 @@ from sf_health_scanner.checks.system_admin_check import (
     check_system_administrators,
     evaluate_system_admins,
 )
+from sf_health_scanner.checks.limits_check import (
+    check_org_limits,
+    evaluate_org_limits,
+)
 
 
 def main():
@@ -52,6 +56,25 @@ def main():
 
         print(f"\nResult: {admin_check['status']}")
         print(f"Recommendation: {admin_check['recommendation']}")
+
+        limits = check_org_limits(
+            instance_url=org["instance_url"],
+            access_token=org["access_token"],
+        )
+
+        limits = evaluate_org_limits(limits)
+
+        print("\nORG LIMITS\n")
+
+        if not limits:
+            print("No tracked limits were returned by the org.\n")
+        else:
+            for limit in limits:
+                print(f"{limit['name']}")
+                print(f"Used: {limit['used']} / {limit['max']} ({limit['percent']}%)")
+                print(f"Remaining: {limit['remaining']}")
+                print(f"Status: {limit['status']}")
+                print()
 
     except Exception as error:
         print(f"\nError: {error}")

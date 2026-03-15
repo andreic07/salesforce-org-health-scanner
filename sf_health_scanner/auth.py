@@ -2,8 +2,10 @@ import json
 import subprocess
 
 
-
 def get_org_details(target_org: str):
+    """
+    Retrieves Salesforce org credentials using Salesforce CLI.
+    """
     command = [
         "sf",
         "org",
