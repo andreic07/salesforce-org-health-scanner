@@ -1,7 +1,9 @@
-from auth import get_org_details
-from api import run_soql_query
-from checks import check_system_administrators, evaluate_system_admins
-
+from sf_health_scanner.auth import get_org_details
+from sf_health_scanner.api import run_soql_query
+from sf_health_scanner.checks.system_admin_check import (
+    check_system_administrators,
+    evaluate_system_admins,
+)
 
 
 def main():

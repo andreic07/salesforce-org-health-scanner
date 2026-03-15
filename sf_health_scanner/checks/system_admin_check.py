@@ -1,4 +1,4 @@
-from api import run_soql_query
+from sf_health_scanner.api import run_soql_query
 
 #pip
 def check_system_administrators(instance_url: str, access_token: str):
