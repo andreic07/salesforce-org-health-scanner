@@ -1,7 +1,10 @@
 from sf_health_scanner.api import run_soql_query
 
-#pip
+
 def check_system_administrators(instance_url: str, access_token: str):
+    """
+    Retrieves all active users with the System Administrator profile.
+    """
     soql = """
     SELECT Id, Name, Username, Profile.Name
     FROM User
@@ -10,18 +13,20 @@ def check_system_administrators(instance_url: str, access_token: str):
     """
 
     result = run_soql_query(instance_url, access_token, soql)
-    records = result.get("records", [])
 
-    return records
+    return result.get("records", [])
 
 
-def evaluate_system_admins(admin_users: list[dict]):
+def evaluate_system_admins(admin_users):
+    """
+    Evaluates the number of active System Administrator users.
+    """
     count = len(admin_users)
 
-    if count <= 2:
+    if count <= 3:
         status = "OK"
         recommendation = "The number of active System Administrator users is within the expected range."
-    elif count <= 4:
+    elif count <= 5:
         status = "WARNING"
         recommendation = "Review whether all active System Administrator users still require elevated access."
     else:
