@@ -8,6 +8,11 @@ from sf_health_scanner.checks.limits_check import (
     check_org_limits,
     evaluate_org_limits,
 )
+from sf_health_scanner.checks.flows_check import (
+    check_flows,
+    analyze_flows,
+    evaluate_active_flows,
+)
 
 
 def main():
@@ -48,7 +53,7 @@ def main():
 
         admin_check = evaluate_system_admins(admin_users)
 
-        print("\nSystem Administrator Check\n")
+        print("\nSYSTEM ADMINISTRATOR CHECK\n")
         print(f"Found {admin_check['count']} active System Administrator users.\n")
 
         for user in admin_users:
@@ -75,6 +80,41 @@ def main():
                 print(f"Remaining: {limit['remaining']}")
                 print(f"Status: {limit['status']}")
                 print()
+
+        flows = check_flows(
+            instance_url=org["instance_url"],
+            access_token=org["access_token"],
+        )
+
+        flow_analysis = analyze_flows(flows)
+        flow_check = evaluate_active_flows(flow_analysis["active_count"])
+
+        print("\nACTIVE FLOWS OVERVIEW\n")
+        print(f"Total Active Flows   : {flow_analysis['active_count']}")
+        print(f"Total Inactive Flows : {flow_analysis['inactive_count']}")
+        print(f"Result               : {flow_check['status']}")
+        print(f"Recommendation       : {flow_check['recommendation']}")
+
+        print("\nFLOWS BY PROCESS TYPE\n")
+        if flow_analysis["process_type_distribution"]:
+            for process_type, count in flow_analysis[
+                "process_type_distribution"
+            ].items():
+                print(f"- {process_type} - {count} flows")
+        else:
+            print("No active flows found.")
+
+        print("\nACTIVE FLOW DETAILS\n")
+        if flow_analysis["active_flows"]:
+            for flow in flow_analysis["active_flows"]:
+                print(f"{flow['name']}")
+                print(f"  Active Version : {flow['active_version']}")
+                print(f"  Total Versions : {flow['total_versions']}")
+                print(f"  Last Modified  : {flow['last_modified']}")
+                print(f"  Process Type   : {flow['process_type']}")
+                print()
+        else:
+            print("No active flows found.")
 
     except Exception as error:
         print(f"\nError: {error}")
