@@ -6,17 +6,25 @@ The tool connects to Salesforce using the Salesforce CLI and retrieves data via 
 
 ---
 
+## Documentation
+
+Full technical documentation is available in the Wiki:
+
+https://github.com/andreic07/salesforce-org-health-scanner/wiki
+
+---
+
 # Version
 
-Current version: v0.2.0
+Current version: **v0.2.0**
 
-This version introduces multiple health checks and improved project structure.
+This version introduces multiple health checks, modular architecture, and advanced analysis using Salesforce REST and Tooling APIs.
 
 ---
 
 # Features
 
-## Implemented checks
+## Implemented checks (data collection + evaluation)
 
 - Salesforce CLI authentication
 - Direct Salesforce REST API querying
@@ -64,14 +72,14 @@ Features:
 Project structure:
 
 sf_health_scanner/
-    auth.py                # Salesforce CLI authentication
-    api.py                 # Salesforce API communication
-    checks/
-        system_admin_check.py   # Admin analysis
-        limits_check.py         # ORG LIMITS analysis
-        flows_check.py          # Flow analysis
+auth.py # Salesforce CLI authentication
+api.py # Salesforce API communication
+checks/
+system_admin_check.py # Admin analysis
+limits_check.py # ORG LIMITS analysis
+flows_check.py # Flow analysis
 
-main.py                    # CLI entry point
+main.py # CLI entry point
 
 This modular structure allows adding new health checks easily without modifying the core logic.
 
@@ -89,7 +97,7 @@ This modular structure allows adding new health checks easily without modifying 
 
 Create a virtual environment:
 
-python -m venv .venv
+python -m venv .venv  
 source .venv/bin/activate
 
 Install dependencies:
@@ -116,6 +124,16 @@ You will be prompted to enter the Salesforce org alias.
 
 ---
 
+# Example Output
+
+The scanner provides structured CLI output including:
+
+- Organization details
+- Security checks (System Administrators)
+- Limits usage with thresholds
+- Flow analysis with version tracking and timestamps
+
+---
 
 # Roadmap
 
