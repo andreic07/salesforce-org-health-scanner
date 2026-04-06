@@ -6,6 +6,16 @@ The tool connects to Salesforce using the Salesforce CLI and retrieves data via 
 
 ---
 
+## About This Project
+
+This project was created as part of my journey into Python development, building on my experience as a Salesforce Developer.
+
+The goal was to combine practical Salesforce knowledge with Python to create a useful tool for analyzing org health, security, and automation complexity.
+
+Rather than being a generic Python exercise, this project focuses on real-world scenarios and problems commonly encountered in Salesforce environments.
+
+---
+
 ## Documentation
 
 Full technical documentation is available in the Wiki:
