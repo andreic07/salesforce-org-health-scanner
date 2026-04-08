@@ -1,13 +1,9 @@
 from sf_health_scanner.api import describe_object
-
-
-TRACKED_OBJECTS = [
-    "Account",
-    "Contact",
-    "Opportunity",
-    "Case",
-    "Lead",
-]
+from sf_health_scanner.config import (
+    CUSTOM_FIELDS_TRACKED_OBJECTS,
+    CUSTOM_FIELDS_OK_MAX,
+    CUSTOM_FIELDS_WARNING_MAX,
+)
 
 
 def check_custom_fields(instance_url: str, access_token: str):
@@ -18,7 +14,7 @@ def check_custom_fields(instance_url: str, access_token: str):
     objects_summary = []
     total_custom_fields = 0
 
-    for object_name in TRACKED_OBJECTS:
+    for object_name in CUSTOM_FIELDS_TRACKED_OBJECTS:
         describe_result = describe_object(instance_url, access_token, object_name)
 
         fields = describe_result.get("fields", [])
@@ -61,9 +57,9 @@ def evaluate_custom_fields(custom_fields_data):
     for item in custom_fields_data["objects"]:
         count = item["custom_field_count"]
 
-        if count >= 51:
+        if count >= CUSTOM_FIELDS_WARNING_MAX:
             status = "HIGH RISK"
-        elif count >= 21:
+        elif count >= CUSTOM_FIELDS_OK_MAX:
             status = "WARNING"
         else:
             status = "OK"

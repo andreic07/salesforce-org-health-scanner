@@ -1,5 +1,6 @@
 import urllib.parse
 import httpx
+from sf_health_scanner.config import SALESFORCE_API_VERSION
 
 
 def run_soql_query(instance_url: str, access_token: str, soql: str):
@@ -8,7 +9,9 @@ def run_soql_query(instance_url: str, access_token: str, soql: str):
     """
     encoded_soql = urllib.parse.quote(soql)
 
-    url = f"{instance_url}/services/data/v60.0/query?q={encoded_soql}"
+    url = (
+        f"{instance_url}/services/data/{SALESFORCE_API_VERSION}/query?q={encoded_soql}"
+    )
 
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -29,7 +32,7 @@ def get_org_limits(instance_url: str, access_token: str):
     """
     Retrieves Salesforce org limits using the REST Limits API.
     """
-    url = f"{instance_url}/services/data/v60.0/limits"
+    url = f"{instance_url}/services/data/{SALESFORCE_API_VERSION}/limits"
 
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -52,7 +55,7 @@ def run_tooling_query(instance_url: str, access_token: str, soql: str):
     """
     encoded_soql = urllib.parse.quote(soql)
 
-    url = f"{instance_url}/services/data/v60.0/tooling/query?q={encoded_soql}"
+    url = f"{instance_url}/services/data/{SALESFORCE_API_VERSION}/tooling/query?q={encoded_soql}"
 
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -74,7 +77,7 @@ def describe_object(instance_url: str, access_token: str, object_name: str):
     Retrieves describe metadata for a Salesforce object.
     """
 
-    url = f"{instance_url}/services/data/v60.0/sobjects/{object_name}/describe"
+    url = f"{instance_url}/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe"
 
     headers = {
         "Authorization": f"Bearer {access_token}",

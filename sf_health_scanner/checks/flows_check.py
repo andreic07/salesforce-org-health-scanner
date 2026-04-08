@@ -2,6 +2,10 @@ from collections import defaultdict
 from datetime import datetime
 
 from sf_health_scanner.api import run_tooling_query
+from sf_health_scanner.config import (
+    ACTIVE_FLOWS_OK_MAX,
+    ACTIVE_FLOWS_WARNING_MAX,
+)
 
 
 def format_salesforce_datetime(value: str):
@@ -112,10 +116,10 @@ def evaluate_active_flows(active_count: int):
     """
     Evaluates automation complexity based on active flow count.
     """
-    if active_count <= 5:
+    if active_count <= ACTIVE_FLOWS_OK_MAX:
         status = "OK"
         recommendation = "The number of active flows is within a reasonable range."
-    elif active_count <= 15:
+    elif active_count <= ACTIVE_FLOWS_WARNING_MAX:
         status = "WARNING"
         recommendation = "Review active flows for overlaps, duplication, or unnecessary automation complexity."
     else:

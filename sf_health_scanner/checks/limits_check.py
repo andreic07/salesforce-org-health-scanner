@@ -1,8 +1,9 @@
 from sf_health_scanner.api import get_org_limits
-
-
-WARNING_THRESHOLD = 80
-CRITICAL_THRESHOLD = 90
+from sf_health_scanner.config import (
+    LIMITS_WARNING_THRESHOLD,
+    LIMITS_CRITICAL_THRESHOLD,
+    TRACKED_LIMITS,
+)
 
 
 def check_org_limits(instance_url: str, access_token: str):
@@ -11,13 +12,7 @@ def check_org_limits(instance_url: str, access_token: str):
     """
     limits_response = get_org_limits(instance_url, access_token)
 
-    tracked_limits = [
-        "DailyApiRequests",
-        "DailyAsyncApexExecutions",
-        "DailyBulkApiRequests",
-        "DataStorageMB",
-        "FileStorageMB",
-    ]
+    tracked_limits = TRACKED_LIMITS
 
     results = []
 
@@ -58,9 +53,9 @@ def evaluate_org_limits(limits):
     for limit in limits:
         percent = limit["percent"]
 
-        if percent >= CRITICAL_THRESHOLD:
+        if percent >= LIMITS_CRITICAL_THRESHOLD:
             status = "CRITICAL"
-        elif percent >= WARNING_THRESHOLD:
+        elif percent >= LIMITS_WARNING_THRESHOLD:
             status = "WARNING"
         else:
             status = "NORMAL"
