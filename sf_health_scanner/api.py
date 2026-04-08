@@ -67,3 +67,25 @@ def run_tooling_query(instance_url: str, access_token: str, soql: str):
         )
 
     return response.json()
+
+
+def describe_object(instance_url: str, access_token: str, object_name: str):
+    """
+    Retrieves describe metadata for a Salesforce object.
+    """
+
+    url = f"{instance_url}/services/data/v60.0/sobjects/{object_name}/describe"
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
+
+    response = httpx.get(url, headers=headers, timeout=30.0)
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Salesforce Describe API error for {object_name}: {response.status_code} - {response.text}"
+        )
+
+    return response.json()

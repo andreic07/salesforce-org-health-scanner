@@ -13,6 +13,10 @@ from sf_health_scanner.checks.flows_check import (
     analyze_flows,
     evaluate_active_flows,
 )
+from sf_health_scanner.checks.custom_fields_check import (
+    check_custom_fields,
+    evaluate_custom_fields,
+)
 
 
 def main():
@@ -115,6 +119,27 @@ def main():
                 print()
         else:
             print("No active flows found.")
+            # CUSTOM FIELDS CHECK
+        custom_fields_data = check_custom_fields(
+            instance_url=org["instance_url"],
+            access_token=org["access_token"],
+        )
+
+        custom_fields_check = evaluate_custom_fields(custom_fields_data)
+
+        print("\nCUSTOM FIELDS OVERVIEW\n")
+        print(f"Total Custom Fields : {custom_fields_check['total_custom_fields']}")
+        print(f"Objects Evaluated   : {custom_fields_check['objects_evaluated']}")
+        print(f"Objects Above Limit : {custom_fields_check['objects_above_limit']}")
+        print(f"Result              : {custom_fields_check['status']}")
+        print(f"Recommendation      : {custom_fields_check['recommendation']}")
+
+        print("\nTOP OBJECTS\n")
+        for item in custom_fields_check["objects"]:
+            print(
+                f"- {item['object_name']} : "
+                f"{item['custom_field_count']} custom fields ({item['status']})"
+            )
 
     except Exception as error:
         print(f"\nError: {error}")
